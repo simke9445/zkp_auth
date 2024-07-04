@@ -4,27 +4,19 @@ pub mod verifier;
 
 #[cfg(test)]
 mod tests {
-    use openssl::{bn::BigNumContext, error::ErrorStack};
+    use openssl::error::ErrorStack;
 
     use crate::exp::{
-        params::generate_params,
+        params::ExpParams,
         prover::{ExpProver, ExpProverChallengeReponse, ExpProverCommit, ExpProverPublicKeys},
         verifier::ExpVerifier,
     };
 
     #[test]
     fn test_exp_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-
-        let mut prover = ExpProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-
-        let mut verifier = ExpVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         // ExpProver's secret
         let x = prover.random()?;
@@ -52,9 +44,9 @@ mod tests {
 
     #[test]
     fn test_exp_incorrect_prover_secret() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -74,9 +66,9 @@ mod tests {
 
     #[test]
     fn test_exp_tampered_public_keys_y1() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { mut y1, y2 } = prover.public_keys(&x)?;
@@ -96,9 +88,9 @@ mod tests {
 
     #[test]
     fn test_exp_tampered_public_keys_y2() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, mut y2 } = prover.public_keys(&x)?;
@@ -118,9 +110,9 @@ mod tests {
 
     #[test]
     fn test_exp_incorrect_commitment_r1() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -140,9 +132,9 @@ mod tests {
 
     #[test]
     fn test_exp_incorrect_commitment_r2() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -162,9 +154,9 @@ mod tests {
 
     #[test]
     fn test_exp_incorrect_challenge_response() -> Result<(), ErrorStack> {
-        let params = generate_params(256)?;
-        let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
+        let params = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params)?;
+        let mut verifier = ExpVerifier::new(&params)?;
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -177,17 +169,20 @@ mod tests {
         s.add_word(1)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
-        assert!(!valid, "Verification should fail with incorrect challenge response");
+        assert!(
+            !valid,
+            "Verification should fail with incorrect challenge response"
+        );
 
         Ok(())
     }
 
     #[test]
     fn test_exp_mismatched_parameters() -> Result<(), ErrorStack> {
-        let params1 = generate_params(256)?;
-        let params2 = generate_params(256)?;
-        let mut prover = ExpProver { params: &params1, ctx: BigNumContext::new()? };
-        let mut verifier = ExpVerifier { params: &params2, ctx: BigNumContext::new()? }; // Different params
+        let params1 = ExpParams::new(256)?;
+        let params2 = ExpParams::new(256)?;
+        let mut prover = ExpProver::new(&params1)?;
+        let mut verifier = ExpVerifier::new(&params2)?; // Different params
 
         let x = prover.random()?;
         let ExpProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -197,7 +192,10 @@ mod tests {
         let ExpProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
-        assert!(!valid, "Verification should fail with mismatched parameters");
+        assert!(
+            !valid,
+            "Verification should fail with mismatched parameters"
+        );
 
         Ok(())
     }

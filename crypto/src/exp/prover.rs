@@ -27,6 +27,13 @@ pub struct ExpProver<'a> {
 }
 
 impl<'a> ExpProver<'a> {
+    pub fn new(params: &ExpParams) -> Result<ExpProver, ErrorStack> {
+        return Ok(ExpProver {
+            params,
+            ctx: BigNumContext::new()?,
+        });
+    }
+
     pub fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand: BigNum = rng(&self.params.q).unwrap();
 

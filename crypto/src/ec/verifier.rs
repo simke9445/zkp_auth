@@ -14,6 +14,13 @@ pub struct EcVerifier<'a> {
 }
 
 impl<'a> EcVerifier<'a> {
+    pub fn new(params: &EcParams) -> Result<EcVerifier, ErrorStack> {
+        return Ok(EcVerifier {
+            params,
+            ctx: BigNumContext::new()?,
+        });
+    }
+
     pub fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand = rng(&self.params.order)?;
         Ok(rand)

@@ -8,25 +8,20 @@ mod tests {
         bn::BigNumContext,
         ec::{EcGroup, EcPoint},
         error::ErrorStack,
+        nid::Nid,
     };
 
     use crate::ec::{
-        params::generate_params,
+        params::EcParams,
         prover::{EcProver, EcProverChallengeReponse, EcProverCommit, EcProverPublicKeys},
         verifier::EcVerifier,
     };
 
     #[test]
     fn test_ec_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new().unwrap(),
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new().unwrap(),
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         // Prover's secret
         let x = prover.random()?;
@@ -64,15 +59,9 @@ mod tests {
 
     #[test]
     fn test_ec_incorrect_prover_secret() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -92,15 +81,9 @@ mod tests {
 
     #[test]
     fn test_ec_tampered_public_keys_y1() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -123,15 +106,9 @@ mod tests {
 
     #[test]
     fn test_ec_tampered_public_keys_y2() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -154,15 +131,9 @@ mod tests {
 
     #[test]
     fn test_ec_incorrect_commitment_r1() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -185,15 +156,9 @@ mod tests {
 
     #[test]
     fn test_ec_incorrect_commitment_r2() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -216,15 +181,9 @@ mod tests {
 
     #[test]
     fn test_ec_incorrect_challenge_response() -> Result<(), ErrorStack> {
-        let params = generate_params()?;
-        let mut prover = EcProver {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params,
-            ctx: BigNumContext::new()?,
-        };
+        let params = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params)?;
+        let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -247,16 +206,10 @@ mod tests {
 
     #[test]
     fn test_ec_mismatched_parameters() -> Result<(), ErrorStack> {
-        let params1 = generate_params()?;
-        let params2 = generate_params()?;
-        let mut prover = EcProver {
-            params: &params1,
-            ctx: BigNumContext::new()?,
-        };
-        let mut verifier = EcVerifier {
-            params: &params2,
-            ctx: BigNumContext::new()?,
-        }; // Different params
+        let params1 = EcParams::new(Nid::SECP256K1)?;
+        let params2 = EcParams::new(Nid::SECP256K1)?;
+        let mut prover = EcProver::new(&params1)?;
+        let mut verifier = EcVerifier::new(&params2)?; // Different params
 
         let x = prover.random()?;
         let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;

@@ -13,6 +13,13 @@ pub struct ExpVerifier<'a> {
 }
 
 impl<'a> ExpVerifier<'a> {
+    pub fn new(params: &ExpParams) -> Result<ExpVerifier, ErrorStack> {
+        return Ok(ExpVerifier {
+            params,
+            ctx: BigNumContext::new()?,
+        });
+    }
+
     pub fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand: BigNum = rng(&self.params.q).unwrap();
 

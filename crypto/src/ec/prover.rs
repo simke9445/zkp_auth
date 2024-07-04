@@ -26,6 +26,13 @@ pub struct EcProverPublicKeys {
 }
 
 impl<'a> EcProver<'a> {
+    pub fn new(params: &EcParams) -> Result<EcProver, ErrorStack> {
+        return Ok(EcProver {
+            params,
+            ctx: BigNumContext::new()?,
+        });
+    }
+
     pub fn random(&mut self) -> Result<BigNum, ErrorStack> {
         let rand = rng(&self.params.order)?;
 

@@ -16,28 +16,40 @@ fn find_generator(
     Ok(point)
 }
 
-pub fn generate_params() -> Result<EcParams, ErrorStack> {
-    let mut ctx = BigNumContext::new()?;
-    let group = EcGroup::from_curve_name(Nid::SECP256K1)?;
-
-    let mut order = BigNum::new()?;
-    group.order(&mut order, &mut ctx)?;
-
-    // Find generators g and h
-    let g = find_generator(&group, &order, &mut ctx)?;
-    let mut h = find_generator(&group, &order, &mut ctx)?;
-
-    // Ensure h is different from g
-    while h.eq(&group, &g, &mut ctx)? {
-        h = find_generator(&group, &order, &mut ctx)?;
-    }
-
-    Ok(EcParams { group, g, h, order })
-}
-
 pub struct EcParams {
     pub group: EcGroup,
     pub g: EcPoint,
     pub h: EcPoint,
     pub order: BigNum,
+}
+
+impl EcParams {
+    pub fn new(nid: Nid) -> Result<EcParams, ErrorStack> {
+        let mut ctx = BigNumContext::new()?;
+        let group = EcGroup::from_curve_name(nid)?;
+
+        let mut order = BigNum::new()?;
+        group.order(&mut order, &mut ctx)?;
+
+        // Find generators g and h
+        let g = find_generator(&group, &order, &mut ctx)?;
+        let mut h = find_generator(&group, &order, &mut ctx)?;
+
+        // Ensure h is different from g
+        while h.eq(&group, &g, &mut ctx)? {
+            h = find_generator(&group, &order, &mut ctx)?;
+        }
+
+        Ok(EcParams { group, g, h, order })
+    }
+
+    pub fn with_params(curve_nid: Nid, g: EcPoint, h: EcPoint) -> Result<EcParams, ErrorStack> {
+        let mut ctx = BigNumContext::new()?;
+        let group = EcGroup::from_curve_name(curve_nid)?;
+
+        let mut order = BigNum::new()?;
+        group.order(&mut order, &mut ctx)?;
+
+        Ok(EcParams { group, g, h, order })
+    }
 }
