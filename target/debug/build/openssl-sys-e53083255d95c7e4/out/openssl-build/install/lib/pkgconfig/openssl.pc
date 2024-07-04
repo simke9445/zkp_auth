@@ -1,7 +1,0 @@
-libdir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/lib
-includedir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/include
-
-Name: OpenSSL
-Description: Secure Sockets Layer and cryptography libraries and tools
-Version: 3.3.1
-Requires: libssl libcrypto
