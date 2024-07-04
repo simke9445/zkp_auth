@@ -13,7 +13,7 @@ mod tests {
     };
 
     #[test]
-    fn test_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
+    fn test_exp_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
 
         let mut prover = ExpProver {
@@ -51,7 +51,7 @@ mod tests {
     }
 
     #[test]
-    fn test_incorrect_prover_secret() -> Result<(), ErrorStack> {
+    fn test_exp_incorrect_prover_secret() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -73,7 +73,7 @@ mod tests {
     }
 
     #[test]
-    fn test_tampered_public_keys_y1() -> Result<(), ErrorStack> {
+    fn test_exp_tampered_public_keys_y1() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -95,7 +95,7 @@ mod tests {
     }
 
     #[test]
-    fn test_tampered_public_keys_y2() -> Result<(), ErrorStack> {
+    fn test_exp_tampered_public_keys_y2() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -117,7 +117,7 @@ mod tests {
     }
 
     #[test]
-    fn test_incorrect_commitment_r1() -> Result<(), ErrorStack> {
+    fn test_exp_incorrect_commitment_r1() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -139,7 +139,7 @@ mod tests {
     }
 
     #[test]
-    fn test_incorrect_commitment_r2() -> Result<(), ErrorStack> {
+    fn test_exp_incorrect_commitment_r2() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -161,7 +161,7 @@ mod tests {
     }
 
     #[test]
-    fn test_incorrect_challenge_response() -> Result<(), ErrorStack> {
+    fn test_exp_incorrect_challenge_response() -> Result<(), ErrorStack> {
         let params = generate_params(256)?;
         let mut prover = ExpProver { params: &params, ctx: BigNumContext::new()? };
         let mut verifier = ExpVerifier { params: &params, ctx: BigNumContext::new()? };
@@ -183,7 +183,7 @@ mod tests {
     }
 
     #[test]
-    fn test_mismatched_parameters() -> Result<(), ErrorStack> {
+    fn test_exp_mismatched_parameters() -> Result<(), ErrorStack> {
         let params1 = generate_params(256)?;
         let params2 = generate_params(256)?;
         let mut prover = ExpProver { params: &params1, ctx: BigNumContext::new()? };
