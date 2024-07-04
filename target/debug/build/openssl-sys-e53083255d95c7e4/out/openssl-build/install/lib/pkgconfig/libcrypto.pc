@@ -1,0 +1,11 @@
+libdir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/lib
+includedir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/include
+enginesdir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/lib/engines-3
+modulesdir=/Users/djsimovic/Projects/zkp_auth/target/debug/build/openssl-sys-e53083255d95c7e4/out/openssl-build/install/lib/ossl-modules
+
+Name: OpenSSL-libcrypto
+Description: OpenSSL cryptography library
+Version: 3.3.1
+Libs: -L${libdir} -lcrypto
+Libs.private: 
+Cflags: -I${includedir}
