@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package zkp_auth;
+
+enum AuthAlgo {
+    DL = 0;
+    EC = 1;
+}
+
+message RegisterRequest {
+    string user = 1;
+    // For DL: BigNum raw bytes
+    // For EC: Compressed EC point
+    bytes y1 = 2;
+    // For DL: BigNum raw bytes
+    // For EC: Compressed EC point
+    bytes y2 = 3;
+    AuthAlgo auth_algo = 4;
+}
+
+message RegisterResponse {}
+
+message AuthenticationChallengeRequest {
+    string user = 1;
+    // For DL: BigNum raw bytes
+    // For EC: Compressed EC point
+    bytes r1 = 2;
+    // For DL: BigNum raw bytes
+    // For EC: Compressed EC point
+    bytes r2 = 3;
+}
+
+message AuthenticationChallengeResponse {
+    string auth_id = 1;
+    // For both DL and EC: BigNum raw bytes representing the challenge
+    bytes c = 2;
+}
+
+message AuthenticationAnswerRequest {
+    string auth_id = 1;
+    // For both DL and EC: BigNum raw bytes representing the response
+    bytes s = 2;
+}
+
+message AuthenticationAnswerResponse {
+    string session_id = 1;
+}
+
+service Auth {
+    rpc Register(RegisterRequest) returns (RegisterResponse) {}
+    rpc CreateAuthenticationChallenge(AuthenticationChallengeRequest) returns (AuthenticationChallengeResponse) {}
+    rpc VerifyAuthentication(AuthenticationAnswerRequest) returns (AuthenticationAnswerResponse) {}
+}

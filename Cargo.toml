@@ -1,9 +1,10 @@
 [workspace]
-members = [
-    "crypto",
-    "proto",
-    "client",
-    "server"
-]
-exclude = [
-]
+resolver = "2"
+members = ["crypto", "client", "server", "proto"]
+exclude = []
+
+[workspace.dependencies]
+tonic = "0.11.0"
+prost = "0.12.6"
+tokio = { version = "1.0", features = ["full"] }
+openssl = { version = "0.10", features = ["vendored"] }
