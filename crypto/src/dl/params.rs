@@ -25,15 +25,15 @@ fn find_generator(q: &BigNum, p: &BigNum, ctx: &mut BigNumContext) -> Result<Big
     }
 }
 
-pub struct ExpParams {
+pub struct DlParams {
     pub q: BigNum,
     pub p: BigNum,
     pub g: BigNum,
     pub h: BigNum,
 }
 
-impl ExpParams {
-    pub fn new(bit_length: i32) -> Result<ExpParams, ErrorStack> {
+impl DlParams {
+    pub fn new(bit_length: i32) -> Result<DlParams, ErrorStack> {
         let mut ctx = BigNumContext::new()?;
 
         // Generate prime p
@@ -54,16 +54,16 @@ impl ExpParams {
             h = find_generator(&q, &p, &mut ctx)?;
         }
 
-        Ok(ExpParams { p, q, g, h })
+        Ok(DlParams { p, q, g, h })
     }
 
-    pub fn with_params(p: BigNum, g: BigNum, h: BigNum) -> Result<ExpParams, ErrorStack> {
+    pub fn with_params(p: BigNum, g: BigNum, h: BigNum) -> Result<DlParams, ErrorStack> {
         // Calculate q = (p-1)/2
         let mut q = BigNum::new()?;
         q.checked_sub(&p, &BigNum::from_u32(1).unwrap())?;
         q.div_word(2)?;
     
-        Ok(ExpParams { p, q, g, h })
+        Ok(DlParams { p, q, g, h })
     }
 }
 
@@ -73,8 +73,8 @@ mod tests {
 
     #[test]
     fn test_new_params() -> Result<(), ErrorStack> {
-        let params = ExpParams::new(256)?;
-        let ExpParams { p: _, q, g, h } = params;
+        let params = DlParams::new(256)?;
+        let DlParams { p: _, q, g, h } = params;
         let mut ctx = BigNumContext::new()?;
 
         // Test 1: Verify q is prime

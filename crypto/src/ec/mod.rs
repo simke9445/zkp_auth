@@ -44,6 +44,19 @@ mod tests {
 
         assert!(valid, "Ec Chaum-Pedersen protocol verification failed");
 
+        // let g_bytes = params.g.to_bytes(
+        //     &params.group,
+        //     PointConversionForm::COMPRESSED,
+        //     &mut prover.ctx,
+        // )?;
+        // let h_bytes = params.g.to_bytes(
+        //     &params.group,
+        //     PointConversionForm::COMPRESSED,
+        //     &mut prover.ctx,
+        // )?;
+
+        // println!("EC: g: {:?}, h: {:?}", g_bytes, h_bytes);
+
         Ok(())
     }
 

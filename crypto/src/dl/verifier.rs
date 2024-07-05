@@ -5,16 +5,16 @@ use openssl::{
 
 use crate::util::rng;
 
-use super::params::ExpParams;
+use super::params::DlParams;
 
-pub struct ExpVerifier<'a> {
-    pub params: &'a ExpParams,
+pub struct DlVerifier<'a> {
+    pub params: &'a DlParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> ExpVerifier<'a> {
-    pub fn new(params: &ExpParams) -> Result<ExpVerifier, ErrorStack> {
-        return Ok(ExpVerifier {
+impl<'a> DlVerifier<'a> {
+    pub fn new(params: &DlParams) -> Result<DlVerifier, ErrorStack> {
+        return Ok(DlVerifier {
             params,
             ctx: BigNumContext::new()?,
         });
