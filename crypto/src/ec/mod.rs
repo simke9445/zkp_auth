@@ -11,10 +11,10 @@ mod tests {
         nid::Nid,
     };
 
-    use crate::ec::{
-        params::EcParams,
-        prover::{EcProver, EcProverChallengeReponse, EcProverCommit, EcProverPublicKeys},
-        verifier::EcVerifier,
+    use crate::{
+        ec::{params::EcParams, prover::EcProver, verifier::EcVerifier},
+        prover::{Prover, ProverChallengeResponse, ProverCommit, ProverPublicKeys},
+        verifier::Verifier,
     };
 
     #[test]
@@ -27,17 +27,17 @@ mod tests {
         let x = prover.random()?;
 
         // Prover's public keys
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
 
         // Prover's commitment
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
 
         // Verifier's challenge
         let c = verifier.random()?;
 
         // Prover's challenge response
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Verifier's check
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
@@ -77,14 +77,14 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
 
         // Use an incorrect secret for the challenge response
         let incorrect_x = prover.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &incorrect_x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &incorrect_x)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
         assert!(!valid, "Verification should fail with incorrect secret");
@@ -99,11 +99,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with y1
         let tampered_y1 = tamper_point(&y1, &params.group, &mut prover.ctx)?;
@@ -124,11 +124,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with y2
         let tampered_y2 = tamper_point(&y2, &params.group, &mut prover.ctx)?;
@@ -149,11 +149,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with r1
         let tampered_r1 = tamper_point(&r1, &params.group, &mut prover.ctx)?;
@@ -174,11 +174,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with r2
         let tampered_r2 = tamper_point(&r2, &params.group, &mut prover.ctx)?;
@@ -199,11 +199,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { mut s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { mut s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with s
         s.add_word(1)?;
@@ -225,11 +225,11 @@ mod tests {
         let mut verifier = EcVerifier::new(&params2)?; // Different params
 
         let x = prover.random()?;
-        let EcProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let EcProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let EcProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
         assert!(

@@ -4,7 +4,7 @@ use openssl::{
     error::ErrorStack,
 };
 
-use crate::util::rng;
+use crate::{util::rng, verifier::Verifier};
 
 use super::params::EcParams;
 
@@ -13,20 +13,20 @@ pub struct EcVerifier<'a> {
     pub ctx: BigNumContext,
 }
 
-impl<'a> EcVerifier<'a> {
-    pub fn new(params: &EcParams) -> Result<EcVerifier, ErrorStack> {
+impl<'a> Verifier<'a, EcParams, EcPoint> for EcVerifier<'a> {
+    fn new(params: &EcParams) -> Result<EcVerifier, ErrorStack> {
         return Ok(EcVerifier {
             params,
             ctx: BigNumContext::new()?,
         });
     }
 
-    pub fn random(&self) -> Result<BigNum, ErrorStack> {
+    fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand = rng(&self.params.order)?;
         Ok(rand)
     }
 
-    pub fn check(
+    fn check(
         &mut self,
         y1: &EcPoint,
         y2: &EcPoint,

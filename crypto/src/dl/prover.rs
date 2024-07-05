@@ -3,69 +3,58 @@ use openssl::{
     error::ErrorStack,
 };
 
-use crate::util::{mod_mul, mod_sub, rng};
+use crate::{
+    prover::{Prover, ProverChallengeResponse, ProverCommit, ProverPublicKeys},
+    util::{mod_mul, mod_sub, rng},
+};
 
 use super::params::DlParams;
-
-pub struct DlProverCommit {
-    pub r1: BigNum,
-    pub r2: BigNum,
-}
-
-pub struct DlProverChallengeReponse {
-    pub s: BigNum,
-}
-
-pub struct DlProverPublicKeys {
-    pub y1: BigNum,
-    pub y2: BigNum,
-}
 
 pub struct DlProver<'a> {
     pub params: &'a DlParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> DlProver<'a> {
-    pub fn new(params: &DlParams) -> Result<DlProver, ErrorStack> {
+impl<'a> Prover<'a, DlParams, BigNum> for DlProver<'a> {
+    fn new(params: &DlParams) -> Result<DlProver, ErrorStack> {
         return Ok(DlProver {
             params,
             ctx: BigNumContext::new()?,
         });
     }
 
-    pub fn random(&self) -> Result<BigNum, ErrorStack> {
+    fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand: BigNum = rng(&self.params.q).unwrap();
 
         Ok(rand)
     }
 
-    pub fn public_keys(&mut self, x: &BigNum) -> Result<DlProverPublicKeys, ErrorStack> {
+    fn public_keys(&mut self, x: &BigNum) -> Result<ProverPublicKeys<BigNum>, ErrorStack> {
         let mut y1 = BigNum::new().unwrap();
         let mut y2 = BigNum::new().unwrap();
         y1.mod_exp(&self.params.g, &x, &self.params.p, &mut self.ctx)?;
         y2.mod_exp(&self.params.h, &x, &self.params.p, &mut self.ctx)?;
 
-        Ok(DlProverPublicKeys { y1, y2 })
+        Ok(ProverPublicKeys { y1, y2 })
     }
 
-    pub fn commit(&mut self, k: &BigNum) -> Result<DlProverCommit, ErrorStack> {
+    fn commit(&mut self, k: &BigNum) -> Result<ProverCommit<BigNum>, ErrorStack> {
         let mut r1 = BigNum::new().unwrap();
         let mut r2 = BigNum::new().unwrap();
 
         r1.mod_exp(&self.params.g, &k, &self.params.p, &mut self.ctx)?;
         r2.mod_exp(&self.params.h, &k, &self.params.p, &mut self.ctx)?;
 
-        Ok(DlProverCommit { r1, r2 })
+        Ok(ProverCommit { r1, r2 })
     }
 
-    pub fn challenge_response(
+    fn challenge_response(
         &mut self,
         k: &BigNum,
         c: &BigNum,
         x: &BigNum,
-    ) -> Result<DlProverChallengeReponse, ErrorStack> {
-        Ok(DlProverChallengeReponse {
+    ) -> Result<ProverChallengeResponse, ErrorStack> {
+        Ok(ProverChallengeResponse {
             s: mod_sub(
                 k,
                 &mod_mul(c, x, &self.params.q, &mut self.ctx)?,

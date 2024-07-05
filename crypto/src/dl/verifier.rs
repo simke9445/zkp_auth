@@ -3,7 +3,7 @@ use openssl::{
     error::ErrorStack,
 };
 
-use crate::util::rng;
+use crate::{util::rng, verifier::Verifier};
 
 use super::params::DlParams;
 
@@ -12,21 +12,21 @@ pub struct DlVerifier<'a> {
     pub ctx: BigNumContext,
 }
 
-impl<'a> DlVerifier<'a> {
-    pub fn new(params: &DlParams) -> Result<DlVerifier, ErrorStack> {
+impl<'a> Verifier<'a, DlParams, BigNum> for DlVerifier<'a> {
+    fn new(params: &DlParams) -> Result<DlVerifier, ErrorStack> {
         return Ok(DlVerifier {
             params,
             ctx: BigNumContext::new()?,
         });
     }
 
-    pub fn random(&self) -> Result<BigNum, ErrorStack> {
+    fn random(&self) -> Result<BigNum, ErrorStack> {
         let rand: BigNum = rng(&self.params.q).unwrap();
 
         Ok(rand)
     }
 
-    pub fn check(
+    fn check(
         &mut self,
         y1: &BigNum,
         y2: &BigNum,

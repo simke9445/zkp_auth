@@ -62,7 +62,7 @@ impl DlParams {
         let mut q = BigNum::new()?;
         q.checked_sub(&p, &BigNum::from_u32(1).unwrap())?;
         q.div_word(2)?;
-    
+
         Ok(DlParams { p, q, g, h })
     }
 }

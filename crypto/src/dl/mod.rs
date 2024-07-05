@@ -6,10 +6,10 @@ pub mod verifier;
 mod tests {
     use openssl::error::ErrorStack;
 
-    use crate::dl::{
-        params::DlParams,
-        prover::{DlProver, DlProverChallengeReponse, DlProverCommit, DlProverPublicKeys},
-        verifier::DlVerifier,
+    use crate::{
+        dl::{params::DlParams, prover::DlProver, verifier::DlVerifier},
+        prover::{Prover, ProverChallengeResponse, ProverCommit, ProverPublicKeys},
+        verifier::Verifier,
     };
 
     #[test]
@@ -22,17 +22,17 @@ mod tests {
         let x = prover.random()?;
 
         // DlProver's public keys
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
 
         // DlProver's commitment
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
 
         // DlVerifier's challenge
         let c = verifier.random()?;
 
         // DlProver's challenge response
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // DlVerifier's check
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
@@ -55,14 +55,14 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
 
         // Use an incorrect secret for the challenge response
         let incorrect_x = prover.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &incorrect_x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &incorrect_x)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
         assert!(!valid, "Verification should fail with incorrect secret");
@@ -77,11 +77,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { mut y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { mut y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with y1
         y1.add_word(1)?;
@@ -99,11 +99,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, mut y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, mut y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with y1
         y2.add_word(1)?;
@@ -121,11 +121,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { mut r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { mut r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with r1
         r1.add_word(1)?;
@@ -143,11 +143,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, mut r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, mut r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with r1
         r2.add_word(1)?;
@@ -165,11 +165,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params)?;
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { mut s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { mut s } = prover.challenge_response(&k, &c, &x)?;
 
         // Tamper with s
         s.add_word(1)?;
@@ -191,11 +191,11 @@ mod tests {
         let mut verifier = DlVerifier::new(&params2)?; // Different params
 
         let x = prover.random()?;
-        let DlProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
+        let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
         let k = prover.random()?;
-        let DlProverCommit { r1, r2 } = prover.commit(&k)?;
+        let ProverCommit { r1, r2 } = prover.commit(&k)?;
         let c = verifier.random()?;
-        let DlProverChallengeReponse { s } = prover.challenge_response(&k, &c, &x)?;
+        let ProverChallengeResponse { s } = prover.challenge_response(&k, &c, &x)?;
 
         let valid = verifier.check(&y1, &y2, &r1, &r2, &c, &s)?;
         assert!(
