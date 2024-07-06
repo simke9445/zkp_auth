@@ -10,13 +10,13 @@ use crate::{
 
 use super::params::DlParams;
 
-pub struct DlProver<'a> {
-    pub params: &'a DlParams,
+pub struct DlProver {
+    pub params: DlParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> Prover<'a, DlParams, BigNum> for DlProver<'a> {
-    fn new(params: &DlParams) -> Result<DlProver, ErrorStack> {
+impl Prover<DlParams, BigNum> for DlProver {
+    fn new(params: DlParams) -> Result<DlProver, ErrorStack> {
         return Ok(DlProver {
             params,
             ctx: BigNumContext::new()?,

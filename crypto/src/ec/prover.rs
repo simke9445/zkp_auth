@@ -7,13 +7,13 @@ use crate::util::{mod_mul, mod_sub, rng};
 
 use super::params::EcParams;
 
-pub struct EcProver<'a> {
-    pub params: &'a EcParams,
+pub struct EcProver {
+    pub params: EcParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> Prover<'a, EcParams, EcPoint> for EcProver<'a> {
-    fn new(params: &EcParams) -> Result<EcProver, ErrorStack> {
+impl Prover<EcParams, EcPoint> for EcProver {
+    fn new(params: EcParams) -> Result<EcProver, ErrorStack> {
         return Ok(EcProver {
             params,
             ctx: BigNumContext::new()?,

@@ -16,6 +16,19 @@ fn find_generator(
     Ok(point)
 }
 
+impl Clone for EcParams {
+    fn clone(&self) -> Self {
+        let group = EcGroup::from_curve_name(self.group.curve_name().unwrap()).unwrap();
+
+        EcParams {
+            group,
+            g: self.g.to_owned(&self.group).unwrap(),
+            h: self.h.to_owned(&self.group).unwrap(),
+            order: self.order.to_owned().unwrap(),
+        }
+    }
+}
+
 pub struct EcParams {
     pub group: EcGroup,
     pub g: EcPoint,

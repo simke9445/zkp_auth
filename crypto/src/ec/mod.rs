@@ -20,8 +20,8 @@ mod tests {
     #[test]
     fn test_ec_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         // Prover's secret
         let x = prover.random()?;
@@ -73,8 +73,8 @@ mod tests {
     #[test]
     fn test_ec_incorrect_prover_secret() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -95,8 +95,8 @@ mod tests {
     #[test]
     fn test_ec_tampered_public_keys_y1() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -120,8 +120,8 @@ mod tests {
     #[test]
     fn test_ec_tampered_public_keys_y2() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -145,8 +145,8 @@ mod tests {
     #[test]
     fn test_ec_incorrect_commitment_r1() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -170,8 +170,8 @@ mod tests {
     #[test]
     fn test_ec_incorrect_commitment_r2() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -195,8 +195,8 @@ mod tests {
     #[test]
     fn test_ec_incorrect_challenge_response() -> Result<(), ErrorStack> {
         let params = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params)?;
-        let mut verifier = EcVerifier::new(&params)?;
+        let mut prover = EcProver::new(params.clone())?;
+        let mut verifier = EcVerifier::new(params.clone())?;
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;
@@ -221,8 +221,8 @@ mod tests {
     fn test_ec_mismatched_parameters() -> Result<(), ErrorStack> {
         let params1 = EcParams::new(Nid::SECP256K1)?;
         let params2 = EcParams::new(Nid::SECP256K1)?;
-        let mut prover = EcProver::new(&params1)?;
-        let mut verifier = EcVerifier::new(&params2)?; // Different params
+        let mut prover = EcProver::new(params1.clone())?;
+        let mut verifier = EcVerifier::new(params2.clone())?; // Different params
 
         let x = prover.random()?;
         let ProverPublicKeys { y1, y2 } = prover.public_keys(&x)?;

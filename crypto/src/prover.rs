@@ -14,8 +14,8 @@ pub struct ProverChallengeResponse {
     pub s: BigNum,
 }
 
-pub trait Prover<'a, Params, Element> {
-    fn new(params: &'a Params) -> Result<Self, ErrorStack>
+pub trait Prover<Params, Element> {
+    fn new(params: Params) -> Result<Self, ErrorStack>
     where
         Self: Sized;
     fn random(&self) -> Result<BigNum, ErrorStack>;

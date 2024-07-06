@@ -1,7 +1,7 @@
 use openssl::{bn::BigNum, error::ErrorStack};
 
-pub trait Verifier<'a, Params, Element> {
-    fn new(params: &'a Params) -> Result<Self, ErrorStack>
+pub trait Verifier<Params, Element> {
+    fn new(params: Params) -> Result<Self, ErrorStack>
     where
         Self: Sized;
     fn random(&self) -> Result<BigNum, ErrorStack>;

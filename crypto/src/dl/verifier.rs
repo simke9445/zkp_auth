@@ -7,13 +7,13 @@ use crate::{util::rng, verifier::Verifier};
 
 use super::params::DlParams;
 
-pub struct DlVerifier<'a> {
-    pub params: &'a DlParams,
+pub struct DlVerifier {
+    pub params: DlParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> Verifier<'a, DlParams, BigNum> for DlVerifier<'a> {
-    fn new(params: &DlParams) -> Result<DlVerifier, ErrorStack> {
+impl Verifier<DlParams, BigNum> for DlVerifier {
+    fn new(params: DlParams) -> Result<DlVerifier, ErrorStack> {
         return Ok(DlVerifier {
             params,
             ctx: BigNumContext::new()?,

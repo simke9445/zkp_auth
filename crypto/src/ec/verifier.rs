@@ -8,13 +8,13 @@ use crate::{util::rng, verifier::Verifier};
 
 use super::params::EcParams;
 
-pub struct EcVerifier<'a> {
-    pub params: &'a EcParams,
+pub struct EcVerifier {
+    pub params: EcParams,
     pub ctx: BigNumContext,
 }
 
-impl<'a> Verifier<'a, EcParams, EcPoint> for EcVerifier<'a> {
-    fn new(params: &EcParams) -> Result<EcVerifier, ErrorStack> {
+impl Verifier<EcParams, EcPoint> for EcVerifier {
+    fn new(params: EcParams) -> Result<EcVerifier, ErrorStack> {
         return Ok(EcVerifier {
             params,
             ctx: BigNumContext::new()?,

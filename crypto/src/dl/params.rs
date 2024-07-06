@@ -25,6 +25,17 @@ fn find_generator(q: &BigNum, p: &BigNum, ctx: &mut BigNumContext) -> Result<Big
     }
 }
 
+impl Clone for DlParams {
+    fn clone(&self) -> Self {
+        DlParams {
+            q: self.q.to_owned().unwrap(),
+            p: self.p.to_owned().unwrap(),
+            g: self.g.to_owned().unwrap(),
+            h: self.h.to_owned().unwrap(),
+        }
+    }
+}
+
 pub struct DlParams {
     pub q: BigNum,
     pub p: BigNum,
