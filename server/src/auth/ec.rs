@@ -1,8 +1,8 @@
-use super::auth::{
+use super::conversion::{FromProto, ToProto};
+use super::types::{
     AuthServer, AuthenticationAnswerResponse, AuthenticationChallengeRequest,
     AuthenticationChallengeResponse, AuthenticationState, RegisterRequest, Registration,
 };
-use super::proto::{FromProto, ToProto};
 use crypto::ec::verifier::EcVerifier;
 use crypto::verifier::Verifier;
 use openssl::ec::EcPoint;

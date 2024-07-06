@@ -13,7 +13,7 @@ use proto::zkp_auth::{
 
 use util::codec::Codec;
 
-use super::auth::{AuthClient, AuthenticationState, Registration};
+use super::types::{AuthClient, AuthenticationState, Registration};
 
 pub struct DlAuthClient {
     pub client: ProtoAuthClient<Channel>,

@@ -17,10 +17,10 @@ pub struct DlProver {
 
 impl Prover<DlParams, BigNum> for DlProver {
     fn new(params: DlParams) -> Result<DlProver, ErrorStack> {
-        return Ok(DlProver {
+        Ok(DlProver {
             params,
             ctx: BigNumContext::new()?,
-        });
+        })
     }
 
     fn random(&self) -> Result<BigNum, ErrorStack> {
@@ -32,8 +32,8 @@ impl Prover<DlParams, BigNum> for DlProver {
     fn public_keys(&mut self, x: &BigNum) -> Result<ProverPublicKeys<BigNum>, ErrorStack> {
         let mut y1 = BigNum::new().unwrap();
         let mut y2 = BigNum::new().unwrap();
-        y1.mod_exp(&self.params.g, &x, &self.params.p, &mut self.ctx)?;
-        y2.mod_exp(&self.params.h, &x, &self.params.p, &mut self.ctx)?;
+        y1.mod_exp(&self.params.g, x, &self.params.p, &mut self.ctx)?;
+        y2.mod_exp(&self.params.h, x, &self.params.p, &mut self.ctx)?;
 
         Ok(ProverPublicKeys { y1, y2 })
     }
@@ -42,8 +42,8 @@ impl Prover<DlParams, BigNum> for DlProver {
         let mut r1 = BigNum::new().unwrap();
         let mut r2 = BigNum::new().unwrap();
 
-        r1.mod_exp(&self.params.g, &k, &self.params.p, &mut self.ctx)?;
-        r2.mod_exp(&self.params.h, &k, &self.params.p, &mut self.ctx)?;
+        r1.mod_exp(&self.params.g, k, &self.params.p, &mut self.ctx)?;
+        r2.mod_exp(&self.params.h, k, &self.params.p, &mut self.ctx)?;
 
         Ok(ProverCommit { r1, r2 })
     }

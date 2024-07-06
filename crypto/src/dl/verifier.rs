@@ -14,10 +14,10 @@ pub struct DlVerifier {
 
 impl Verifier<DlParams, BigNum> for DlVerifier {
     fn new(params: DlParams) -> Result<DlVerifier, ErrorStack> {
-        return Ok(DlVerifier {
+        Ok(DlVerifier {
             params,
             ctx: BigNumContext::new()?,
-        });
+        })
     }
 
     fn random(&self) -> Result<BigNum, ErrorStack> {

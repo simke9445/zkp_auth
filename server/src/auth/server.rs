@@ -1,6 +1,6 @@
-use super::auth::AuthServer;
 use super::dl::DlAuthServer;
 use super::ec::EcAuthServer;
+use super::types::AuthServer;
 use crypto::dl::verifier::DlVerifier;
 use crypto::ec::verifier::EcVerifier;
 use crypto::verifier::Verifier;

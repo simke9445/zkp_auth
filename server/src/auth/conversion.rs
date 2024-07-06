@@ -1,4 +1,4 @@
-use super::auth::{
+use super::types::{
     AuthenticationAnswerRequest, AuthenticationAnswerResponse, AuthenticationChallengeRequest,
     AuthenticationChallengeResponse, RegisterRequest, RegisterResponse,
 };
@@ -15,6 +15,7 @@ use tonic::Status;
 use util::codec::Codec;
 
 pub trait FromProto<T>: Sized {
+    #[allow(clippy::wrong_self_convention)]
     fn from_proto(self, ctx: &mut BigNumContext) -> Result<T, Status>;
 }
 

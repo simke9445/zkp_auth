@@ -66,7 +66,7 @@ mod tests {
         ctx: &mut BigNumContext,
     ) -> Result<EcPoint, ErrorStack> {
         let mut tampered = EcPoint::new(group)?;
-        tampered.add(group, point, &group.generator(), ctx)?;
+        tampered.add(group, point, group.generator(), ctx)?;
         Ok(tampered)
     }
 

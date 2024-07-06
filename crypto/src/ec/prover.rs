@@ -1,3 +1,5 @@
+#![allow(clippy::unnecessary_mut_passed)]
+
 use openssl::bn::{BigNum, BigNumContext};
 use openssl::ec::EcPoint;
 use openssl::error::ErrorStack;
@@ -14,10 +16,10 @@ pub struct EcProver {
 
 impl Prover<EcParams, EcPoint> for EcProver {
     fn new(params: EcParams) -> Result<EcProver, ErrorStack> {
-        return Ok(EcProver {
+        Ok(EcProver {
             params,
             ctx: BigNumContext::new()?,
-        });
+        })
     }
 
     fn random(&self) -> Result<BigNum, ErrorStack> {

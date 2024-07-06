@@ -11,9 +11,9 @@ use proto::zkp_auth::AuthAlgo;
 
 use util::params::{dl_params, ec_params};
 
-use super::auth::AuthClient;
 use super::dl::DlAuthClient;
 use super::ec::EcAuthClient;
+use super::types::AuthClient;
 
 pub struct Client {
     ec_client: EcAuthClient,
