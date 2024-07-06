@@ -887,9 +887,13 @@ dependencies = [
 name = "server"
 version = "0.1.0"
 dependencies = [
+ "crypto",
  "openssl",
+ "proto",
  "tokio",
  "tonic",
+ "util",
+ "uuid",
 ]
 
 [[package]]
@@ -1140,6 +1144,15 @@ version = "0.1.0"
 dependencies = [
  "crypto",
  "openssl",
+]
+
+[[package]]
+name = "uuid"
+version = "1.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5de17fd2f7da591098415cff336e12965a28061ddace43b59cb3c430179c9439"
+dependencies = [
+ "getrandom",
 ]
 
 [[package]]

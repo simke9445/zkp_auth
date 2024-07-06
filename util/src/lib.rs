@@ -1,2 +1,2 @@
-pub mod params;
 pub mod codec;
+pub mod params;
