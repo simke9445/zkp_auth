@@ -28,6 +28,7 @@ message AuthenticationChallengeRequest {
     // For DL: BigNum raw bytes
     // For EC: Compressed EC point
     bytes r2 = 3;
+    AuthAlgo auth_algo = 4;
 }
 
 message AuthenticationChallengeResponse {
@@ -40,6 +41,7 @@ message AuthenticationAnswerRequest {
     string auth_id = 1;
     // For both DL and EC: BigNum raw bytes representing the response
     bytes s = 2;
+    AuthAlgo auth_algo = 3;
 }
 
 message AuthenticationAnswerResponse {

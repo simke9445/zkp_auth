@@ -59,6 +59,7 @@ impl AuthClient for EcAuthClient {
             user: user.to_string(),
             r1: commit.r1.encode(&mut self.prover.ctx)?,
             r2: commit.r2.encode(&mut self.prover.ctx)?,
+            auth_algo: AuthAlgo::Ec as i32,
         };
 
         let response = self
@@ -95,6 +96,7 @@ impl AuthClient for EcAuthClient {
         let request = AuthenticationAnswerRequest {
             auth_id: auth_id.to_string(),
             s: response.s.encode(&mut self.prover.ctx)?,
+            auth_algo: AuthAlgo::Ec as i32,
         };
 
         let response = self
