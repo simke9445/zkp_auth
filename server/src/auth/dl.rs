@@ -120,7 +120,7 @@ impl AuthServer for DlAuthServer {
             .lock()
             .map_err(|_| Status::internal("Lock error"))?;
         let state = auth_states
-            .remove(&request.auth_id)
+            .get(&request.auth_id)
             .ok_or_else(|| Status::not_found("Invalid auth_id"))?;
 
         let registrations = self
@@ -143,6 +143,8 @@ impl AuthServer for DlAuthServer {
             .map_err(|_| Status::internal("Verification failed"))?;
 
         if verified {
+            auth_states.remove(&request.auth_id);
+
             let response = AuthenticationAnswerResponse {
                 session_id: Uuid::new_v4().to_string(),
             };

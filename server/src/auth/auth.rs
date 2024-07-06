@@ -49,13 +49,6 @@ pub struct AuthenticationState<T> {
     pub user: String,
 }
 
-// #[tonic::async_trait]
-// pub trait AuthServer<T>: Send + Sync + 'static {
-//     async fn register(&mut self, request: RegisterRequest<T>) -> Result<RegisterResponse, Status>;
-//     async fn create_authentication_challenge(&mut self, request: AuthenticationChallengeRequest<T>) -> Result<AuthenticationChallengeResponse, Status>;
-//     async fn verify_authentication(&mut self, request: AuthenticationAnswerRequest) -> Result<AuthenticationAnswerResponse, Status>;
-// }
-
 #[tonic::async_trait]
 pub trait AuthServer: Send + Sync + 'static {
     async fn register(
