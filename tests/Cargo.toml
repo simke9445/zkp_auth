@@ -1,0 +1,11 @@
+[package]
+name = "integration_tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.0", features = ["full", "test-util"] }
+tonic = { workspace = true }
+client = { path = "../client" }
+server = { path = "../server" }
+proto = { path = "../proto" }

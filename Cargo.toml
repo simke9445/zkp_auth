@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crypto", "client", "server", "proto", "util"]
+members = ["crypto", "client", "server", "proto", "util", "tests"]
 exclude = []
 
 [workspace.dependencies]
