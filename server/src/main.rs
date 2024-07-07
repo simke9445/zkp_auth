@@ -1,24 +1,26 @@
 use proto::zkp_auth::auth_server::AuthServer;
-use server::auth::server::Server;
+use server::auth::server::Server as ZkpServer;
 use std::env;
-use tonic::transport::Server as TonicServer;
-
-const DEFAULT_PORT: u16 = 50051;
+use tonic::transport::Server;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
-    let port = args
-        .get(1)
-        .and_then(|s| s.parse().ok())
-        .unwrap_or(DEFAULT_PORT);
 
-    let addr = format!("[::1]:{}", port).parse()?;
-    let server = Server::new()?;
+    if args.len() != 3 {
+        eprintln!("Usage: {} <host> <port>", args[0]);
+        std::process::exit(1);
+    }
+
+    let host = &args[1];
+    let port = &args[2];
+
+    let addr = format!("{}:{}", host, port).parse()?;
+    let server = ZkpServer::new()?;
 
     println!("ZKP Auth Server listening on {}", addr);
 
-    TonicServer::builder()
+    Server::builder()
         .add_service(AuthServer::new(server))
         .serve(addr)
         .await?;

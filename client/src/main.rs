@@ -3,16 +3,16 @@ use std::env;
 use client::auth::client::Client;
 use proto::zkp_auth::AuthAlgo;
 
-const DEFAULT_PORT: u16 = 50051;
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 3 || args.len() > 4 {
-        eprintln!("Usage: {} <username> <auth_algo> [port]", args[0]);
+    if args.len() != 5 {
+        eprintln!(
+            "Usage: {} <username> <auth_algo> <server_host> <server_port>",
+            args[0]
+        );
         eprintln!("  auth_algo: 'dl' for Discrete Logarithm or 'ec' for Elliptic Curve");
-        eprintln!("  port: optional, defaults to {}", DEFAULT_PORT);
         std::process::exit(1);
     }
 
@@ -27,13 +27,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             std::process::exit(1);
         }
     };
+    let server_host = &args[3];
+    let server_port = &args[4];
 
-    let port = args
-        .get(3)
-        .and_then(|s| s.parse().ok())
-        .unwrap_or(DEFAULT_PORT);
-
-    let mut client = Client::new(format!("http://[::1]:{}", port)).await?;
+    let mut client = Client::new(format!("http://{}:{}", server_host, server_port)).await?;
 
     // Register
     client.register(username, auth_algo).await?;

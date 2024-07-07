@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  zkp_auth_server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      - RUST_LOG=info
+    command:
+      - server
+      - "0.0.0.0"
+      - "50051"
+
+  zkp_auth_client:  
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    depends_on:
+      - zkp_auth_server  
+    environment:
+      - RUST_LOG=info
+      - ZKP_USERNAME=my_user 
+      - ZKP_AUTH_ALGO=dl 
+    command: 
+      - sh
+      - -c
+      - client $${ZKP_USERNAME} $${ZKP_AUTH_ALGO} zkp_auth_server 50051
