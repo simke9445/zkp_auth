@@ -114,23 +114,43 @@ The `docker-compose.yml` file sets up two services:
 - Authentication protocol tests in `crypto/src/dl/` and `crypto/src/ec/`
 - Integration tests in `tests/` directory
 
-## Usage
-
-To run the system locally using Docker:
-
-```bash
-docker-compose up --build
-```
-
-For AWS deployment, refer to the AWS CDK stack in the `aws/` directory.
-
 ## Dependencies
 
 - Rust 1.79 or later
 - OpenSSL
 - Protobuf compiler
 
-## Client Implementation
+## Setup and Installation
+
+To set up the project and install all dependencies:
+
+1. Clone the repository
+2. Navigate to the project root
+3. Run the following command to install all workspace dependencies:
+
+```bash
+cargo build
+```
+
+## Running the Server and Client
+
+### Server
+
+To run the server:
+
+```bash
+cargo run --package server --bin server -- 0.0.0.0 50051
+```
+
+This command starts the server listening on all interfaces (`0.0.0.0`) on port 50051.
+
+### Client
+
+To run the client:
+
+```bash
+cargo run --package client --bin client -- username dl 0.0.0.0 50051
+```
 
 The client's `main.rs` implements a complete authentication flow:
 
@@ -140,10 +160,15 @@ The client's `main.rs` implements a complete authentication flow:
 4. Initiates an authentication challenge.
 5. Completes the authentication process.
 
-Example usage:
+## Usage
+
+For local testing using Docker:
+
 ```bash
-cargo run --package client --bin client -- username dl localhost 50051
+docker-compose up --build
 ```
+
+For AWS deployment, refer to the AWS CDK stack in the `aws/` directory.
 
 ## Design Principles
 
