@@ -44,18 +44,29 @@ mod tests {
 
         assert!(valid, "Ec Chaum-Pedersen protocol verification failed");
 
-        // let g_bytes = params.g.to_bytes(
-        //     &params.group,
-        //     PointConversionForm::COMPRESSED,
-        //     &mut prover.ctx,
-        // )?;
-        // let h_bytes = params.g.to_bytes(
-        //     &params.group,
-        //     PointConversionForm::COMPRESSED,
-        //     &mut prover.ctx,
-        // )?;
+        // let values = [("g", &params.g), ("h", &params.h)];
 
-        // println!("EC: g: {:?}, h: {:?}", g_bytes, h_bytes);
+        // for (name, point) in values {
+        //     let mut x = BigNum::new()?;
+        //     let mut y = BigNum::new()?;
+        //     point.affine_coordinates(&params.group, &mut x, &mut y, &mut prover.ctx)?;
+
+        //     // Get compressed byte representation
+        //     let bytes = point.to_bytes(
+        //         &params.group,
+        //         PointConversionForm::COMPRESSED,
+        //         &mut prover.ctx,
+        //     )?;
+
+        //     // Print the information in the desired format
+        //     println!(
+        //         "{}: (number: (x: {}, y: {}), bytes: {:?})",
+        //         name,
+        //         x.to_dec_str()?,
+        //         y.to_dec_str()?,
+        //         bytes
+        //     );
+        // }
 
         Ok(())
     }

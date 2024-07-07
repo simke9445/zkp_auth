@@ -1,6 +1,5 @@
 use openssl::bn::{BigNum, BigNumContext};
 use openssl::error::ErrorStack;
-
 pub fn is_generator(
     g: &BigNum,
     q: &BigNum,
@@ -8,7 +7,7 @@ pub fn is_generator(
     ctx: &mut BigNumContext,
 ) -> Result<bool, ErrorStack> {
     let mut exp = BigNum::new()?;
-    // Check if g^q mod p = 1
+    // For simplicity, check if g^q mod p = 1
     exp.mod_exp(g, q, p, ctx)?;
     Ok(exp == BigNum::from_u32(1)? && *g != BigNum::from_u32(1)?)
 }
@@ -44,12 +43,13 @@ pub struct DlParams {
 }
 
 impl DlParams {
-    pub fn new(bit_length: i32) -> Result<DlParams, ErrorStack> {
+    pub fn new() -> Result<DlParams, ErrorStack> {
         let mut ctx = BigNumContext::new()?;
+        let q_bit_length = 256;
 
-        // Generate prime p
+        // For simplicity, generate q as 256 bits, and p as q's safe prime p = 2q + 1
         let mut p = BigNum::new()?;
-        p.generate_prime(bit_length + 1, true, None, None)?;
+        p.generate_prime(q_bit_length + 1, true, None, None)?;
 
         // Calculate q = (p-1)/2
         let mut q = BigNum::new()?;
@@ -68,12 +68,7 @@ impl DlParams {
         Ok(DlParams { p, q, g, h })
     }
 
-    pub fn with_params(p: BigNum, g: BigNum, h: BigNum) -> Result<DlParams, ErrorStack> {
-        // Calculate q = (p-1)/2
-        let mut q = BigNum::new()?;
-        q.checked_sub(&p, &BigNum::from_u32(1).unwrap())?;
-        q.div_word(2)?;
-
+    pub fn with_params(q: BigNum, p: BigNum, g: BigNum, h: BigNum) -> Result<DlParams, ErrorStack> {
         Ok(DlParams { p, q, g, h })
     }
 }
@@ -84,18 +79,14 @@ mod tests {
 
     #[test]
     fn test_new_params() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
-        let DlParams { p: _, q, g, h } = params;
+        let params = DlParams::new()?;
+        let DlParams { p, q, g, h } = params;
         let mut ctx = BigNumContext::new()?;
 
         // Test 1: Verify q is prime
         assert!(q.is_prime(20, &mut ctx)?, "q is not prime");
 
         // Test 2: Verify p (2q + 1) is prime
-        let mut p = BigNum::new()?;
-        p.checked_mul(&BigNum::from_u32(2).unwrap(), &q, &mut ctx)?;
-        let tmp = p.to_owned().unwrap();
-        p.checked_add(&tmp, &BigNum::from_u32(1).unwrap())?;
         assert!(p.is_prime(20, &mut ctx)?, "p (2q + 1) is not prime");
 
         // Test 3: Verify g is a generator of order q
@@ -116,13 +107,19 @@ mod tests {
         // Test 6: Verify q has the correct bit length
         assert!(q.num_bits() == 256, "q does not have 256 bits");
 
-        println!(
-            "h: {:?}, g: {:?}, q: {:?}, p: {:?}",
-            h.to_dec_str(),
-            g.to_dec_str(),
-            q.to_dec_str(),
-            p.to_dec_str()
-        );
+        // let values = [
+        //     ("h", &h),
+        //     ("g", &g),
+        //     ("q", &q),
+        //     ("p", &p),
+        // ];
+
+        // for (name, num) in values {
+        //     let dec_str = num.to_dec_str().unwrap();
+        //     let byte_repr = num.to_vec();
+
+        //     println!("{}: (number: \"{}\", bytes: \"{:?}\")", name, dec_str, byte_repr);
+        // }
 
         Ok(())
     }

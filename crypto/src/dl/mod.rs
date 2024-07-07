@@ -14,7 +14,7 @@ mod tests {
 
     #[test]
     fn test_dl_chaum_pedersen_protocol() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn test_dl_incorrect_prover_secret() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -72,7 +72,7 @@ mod tests {
 
     #[test]
     fn test_dl_tampered_public_keys_y1() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -94,7 +94,7 @@ mod tests {
 
     #[test]
     fn test_dl_tampered_public_keys_y2() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -116,7 +116,7 @@ mod tests {
 
     #[test]
     fn test_dl_incorrect_commitment_r1() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -138,7 +138,7 @@ mod tests {
 
     #[test]
     fn test_dl_incorrect_commitment_r2() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -160,7 +160,7 @@ mod tests {
 
     #[test]
     fn test_dl_incorrect_challenge_response() -> Result<(), ErrorStack> {
-        let params = DlParams::new(256)?;
+        let params = DlParams::new()?;
         let mut prover = DlProver::new(params.clone())?;
         let mut verifier = DlVerifier::new(params.clone())?;
 
@@ -185,8 +185,8 @@ mod tests {
 
     #[test]
     fn test_dl_mismatched_parameters() -> Result<(), ErrorStack> {
-        let params1 = DlParams::new(256)?;
-        let params2 = DlParams::new(256)?;
+        let params1 = DlParams::new()?;
+        let params2 = DlParams::new()?;
         let mut prover = DlProver::new(params1.clone())?;
         let mut verifier = DlVerifier::new(params2.clone())?; // Different params
 
