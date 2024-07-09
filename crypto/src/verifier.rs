@@ -6,7 +6,7 @@ pub trait Verifier<Params, Element> {
         Self: Sized;
     fn random(&self) -> Result<BigNum, ErrorStack>;
     fn check(
-        &mut self,
+        &self,
         y1: &Element,
         y2: &Element,
         r1: &Element,

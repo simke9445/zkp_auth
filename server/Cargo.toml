@@ -10,6 +10,7 @@ tonic = { workspace = true }
 tokio = { workspace = true }
 openssl = { workspace = true }
 uuid = { workspace = true }
+dashmap = { workspace = true }
 proto = { path = "../proto" }
 crypto = { path = "../crypto" }
 util = { path = "../util" }

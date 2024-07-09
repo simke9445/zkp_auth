@@ -29,8 +29,8 @@ impl AuthClient for DlAuthClient {
 
         let request = RegisterRequest {
             user: user.to_string(),
-            y1: keys.y1.encode(&mut self.prover.ctx)?,
-            y2: keys.y2.encode(&mut self.prover.ctx)?,
+            y1: keys.y1.encode()?,
+            y2: keys.y2.encode()?,
             auth_algo: AuthAlgo::Dl as i32,
         };
 
@@ -57,8 +57,8 @@ impl AuthClient for DlAuthClient {
 
         let request = AuthenticationChallengeRequest {
             user: user.to_string(),
-            r1: commit.r1.encode(&mut self.prover.ctx)?,
-            r2: commit.r2.encode(&mut self.prover.ctx)?,
+            r1: commit.r1.encode()?,
+            r2: commit.r2.encode()?,
             auth_algo: AuthAlgo::Dl as i32,
         };
 
@@ -68,7 +68,7 @@ impl AuthClient for DlAuthClient {
             .await?;
         let resp = response.into_inner();
         let auth_id = resp.auth_id;
-        let c = BigNum::decode(&resp.c, &mut self.prover.ctx)?;
+        let c = BigNum::decode(&resp.c)?;
 
         self.authentication_states.insert(
             auth_id.clone(),
@@ -95,7 +95,7 @@ impl AuthClient for DlAuthClient {
 
         let request = AuthenticationAnswerRequest {
             auth_id: auth_id.to_string(),
-            s: response.s.encode(&mut self.prover.ctx)?,
+            s: response.s.encode()?,
             auth_algo: AuthAlgo::Dl as i32,
         };
 

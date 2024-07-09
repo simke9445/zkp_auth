@@ -19,10 +19,10 @@ pub trait Prover<Params, Element> {
     where
         Self: Sized;
     fn random(&self) -> Result<BigNum, ErrorStack>;
-    fn public_keys(&mut self, x: &BigNum) -> Result<ProverPublicKeys<Element>, ErrorStack>;
-    fn commit(&mut self, k: &BigNum) -> Result<ProverCommit<Element>, ErrorStack>;
+    fn public_keys(&self, x: &BigNum) -> Result<ProverPublicKeys<Element>, ErrorStack>;
+    fn commit(&self, k: &BigNum) -> Result<ProverCommit<Element>, ErrorStack>;
     fn challenge_response(
-        &mut self,
+        &self,
         k: &BigNum,
         c: &BigNum,
         x: &BigNum,
